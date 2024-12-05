@@ -4,30 +4,58 @@
 using namespace std;
 
 int main() {
-    vector<int> arr = {10, 7, 8, 9, 1, 5};
-    int n = arr.size();
+    vector<int> arrInt = {10, 7, 8, 9, 1, 5};
+    vector<char> arrChar = {'d', 'a', 'c', 'b', 'e'};
+    vector<float> arrFloat = {1.5, 3.2, 0.9, 4.8, 2.1};
+
     int x = 5;
+    char y = 'b';
+    float z = 3.2;
 
-    cout << "Array original: "; // Mostrar el array original
-        for (int val : arr)
-            cout << val << " ";
-        cout << endl;
+    // Ordenar y buscar en vector de enteros
+    cout << "Array original (int): ";
+    for (int val : arrInt)
+        cout << val << " ";
+    cout << endl;
 
-        QuickSort(arr, 0, n - 1); // Ordenar el array
+    QuickSort(arrInt, 0, arrInt.size() - 1);
 
-        cout << "Array ordenado: "; // Mostrar el array ordenado
-        for (int val : arr)
-            cout << val << " ";
-        cout << endl;
+    cout << "Array ordenado (int): ";
+    for (int val : arrInt)
+        cout << val << " ";
+    cout << endl;
 
-    int resultado = BusqBin(x, arr, 0, n - 1); // Buscar el elemento en el array ordenado
+    cout << "Posición de x en array ordenado: " << BusqBin(x, arrInt, 0, arrInt.size() - 1) << endl;
 
+    // Ordenar y buscar en vector de caracteres
+    cout << "\nArray original (char): ";
+    for (char val : arrChar)
+        cout << val << " ";
+    cout << endl;
 
+    QuickSort(arrChar, 0, arrChar.size() - 1);
 
-    if (resultado != -1)
-        cout << "Elemento encontrado en el vector despues de ordenarlo en posición: " << resultado << endl;
-    else
-        cout << "Elemento no encontrado" << endl;
+    cout << "Array ordenado (char): ";
+    for (char val : arrChar)
+        cout << val << " ";
+    cout << endl;
+
+    cout << "Posición de y en array ordenado: " << BusqBin(y, arrChar, 0, arrChar.size() - 1) << endl;
+
+    // Ordenar y buscar en vector de floats
+    cout << "\nArray original (float): ";
+    for (float val : arrFloat)
+        cout << val << " ";
+    cout << endl;
+
+    QuickSort(arrFloat, 0, arrFloat.size() - 1);
+
+    cout << "Array ordenado (float): ";
+    for (float val : arrFloat)
+        cout << val << " ";
+    cout << endl;
+
+    cout << "Posición de z en array ordenado: " << BusqBin(z, arrFloat, 0, arrFloat.size() - 1) << endl;
 
     return 0;
 }
