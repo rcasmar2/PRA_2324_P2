@@ -1,5 +1,8 @@
 #include <iostream>
+#include <ostream>
 #include <vector>
+#include <algorithm> 
+#include <chrono>
 #include "dyv.h"
 using namespace std;
 
@@ -18,7 +21,7 @@ int main() {
         cout << val << " ";
     cout << endl;
 
-    QuickSort(arrInt, 0, arrInt.size() - 1);
+    medirTiempoQuickSort(arrInt, "QuickSort Enteros");
 
     cout << "Array ordenado (int): ";
     for (int val : arrInt)
@@ -33,7 +36,7 @@ int main() {
         cout << val << " ";
     cout << endl;
 
-    QuickSort(arrChar, 0, arrChar.size() - 1);
+    medirTiempoQuickSort(arrChar, "QuickSort Caracteres");
 
     cout << "Array ordenado (char): ";
     for (char val : arrChar)
@@ -48,7 +51,7 @@ int main() {
         cout << val << " ";
     cout << endl;
 
-    QuickSort(arrFloat, 0, arrFloat.size() - 1);
+    medirTiempoQuickSort(arrFloat, "QuickSort Flotantes");
 
     cout << "Array ordenado (float): ";
     for (float val : arrFloat)

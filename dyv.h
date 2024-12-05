@@ -1,8 +1,11 @@
 #ifndef DYV_H
 #define DYV_H
 
+#include <iostream>
+#include <ostream>
 #include <vector>
 #include <algorithm> 
+#include <chrono>
 using namespace std;
 
 // Búsqueda binaria recursiva
@@ -45,6 +48,19 @@ void QuickSort(vector<T>& arr, int ini, int fin) {
         QuickSort(arr, ini, pivot - 1);   // Ordena la parte izquierda
         QuickSort(arr, pivot + 1, fin);  // Ordena la parte derecha
     }
+}
+
+template <typename T>
+void medirTiempoQuickSort(vector<T> arr, const string& nombre) {
+    auto start = chrono::high_resolution_clock::now(); // Tiempo inicial
+
+    QuickSort(arr, 0, arr.size() - 1); // Ejecuta QuickSort
+
+    auto end = chrono::high_resolution_clock::now(); // Tiempo final
+    chrono::duration<float, std::milli> duration = end - start;
+
+    // Muestra el tiempo de ejecución
+    cout << "Tiempo de ejecución (" << nombre << "): " << duration.count() << " ms" << endl;
 }
 
 #endif
