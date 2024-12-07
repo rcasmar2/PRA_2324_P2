@@ -1,66 +1,62 @@
-#include<iostream>
-#include<ostream>
-#include<vector>
-#include<algorithm>
-#include <limits> 
+#include <iostream>
+#include <vector>
+#include <limits> // Para representar valores altos como infinito
 using namespace std;
 
-int cambio(const vector<int>& v,int x, int **M){
-    //el vector representa los posibles valores de las monedas, la x el valor exacto que estamos buscando y por ende el tamaño de la tabla será de N+1 (del 0 hasta N), M es la matriz donde guardaremos las soluciones.
-    // Inicializamos la matriz
-    for (int i = 0; i <= x; i++) {
-        for (int j = 0; j <= v.size(); j++) {
-            if (i == 0) {
-                M[i][j] = 0; // Para devolver 0, no necesitamos monedas
-            } else if (j == 0) {
-                M[i][j] = numeric_limits<int>::max(); // No podemos devolver cantidades sin monedas
-            } else {
-                // Opción 1: No usar la moneda actual
-                int sinUsar = M[i][j - 1];
-                // Opción 2: Usar la moneda actual si es posible
-                int usando = (i >= v[j - 1] && M[i - v[j - 1]][j] != numeric_limits<int>::max()) 
-                             ? M[i - v[j - 1]][j] + 1 
-                             : numeric_limits<int>::max();
-                // Tomamos el mínimo entre ambas opciones
-                M[i][j] = min(sinUsar, usando);
-            }
-        }
+const int infinito = numeric_limits<int>::max(); // Valor alto para representar infinito
+
+// Función recursiva para calcular el número mínimo de monedas necesarias
+int cambioRecursivo(const vector<int>& monedas, int cantidad, int monedaActual, vector<vector<int>>& memo) {
+    // Caso base 1: Si la cantidad es 0, no necesitamos monedas
+    if (cantidad == 0) {
+        return 0;
     }
 
-    // El resultado está en la última celda de la matriz
-    if ( M[x][v.size()] == numeric_limits<int>::max() ){
-        return -1 ; 
-    }else{ 
-        return M[x][v.size()];
+    // Caso base 2: Si la cantidad es negativa o no quedan monedas, devolvemos infinito
+    if (cantidad < 0 || monedaActual < 0) {
+        return infinito;
     }
+
+    // Caso base 3: Si ya calculamos esta solución, devolvemos el valor guardado
+    if (memo[cantidad][monedaActual] != -1) {
+        return memo[cantidad][monedaActual];
+    }
+
+    // Caso recursivo: Calcular el mínimo entre no usar la moneda actual o usarla
+    // Opción 1: No usar la moneda actual
+    int sinUsar = cambioRecursivo(monedas, cantidad, monedaActual - 1, memo);
+
+    // Opción 2: Usar la moneda actual si es posible
+    int usando;
+    if (cantidad >= monedas[monedaActual]) {
+        // Si la moneda actual cabe en la cantidad, calculamos usando esta moneda
+        usando = cambioRecursivo(monedas, cantidad - monedas[monedaActual], monedaActual, memo) + 1;
+    } else {
+        // Si no cabe, el resultado es infinito (no se puede usar esta moneda)
+        usando = infinito;
+    }
+    // Guardar el resultado en la tabla de memorización
+    memo[cantidad][monedaActual] = min(sinUsar, usando);
+
+    return memo[cantidad][monedaActual];
 }
 
-int main(){
-    // Vector de monedas v y valor a buscar
-	vector<int> v = {1, 3, 4};
-	int x = 6;
+int main() {
+    // Vector de monedas y cantidad a devolver
+    vector<int> monedas = {1, 4, 6};
+    int cantidad = 9;
 
-   // Crear la matriz bidimensional
-    int** M = new int*[x + 1];
-    for (int i = 0; i <= x; i++) {
-        M[i] = new int[v.size() + 1];
-        fill(M[i], M[i] + v.size() + 1, -1);
-    }
+    // Crear una tabla de memorización inicializada en -1
+    vector<vector<int>> memo(cantidad + 1, vector<int>(monedas.size(), -1));
 
-    // Calcular el número mínimo de monedas
-    int resultado = cambio(v, x, M);
+    // Calcular el número mínimo de monedas necesarias
+    int resultado = cambioRecursivo(monedas, cantidad, monedas.size() - 1, memo);
 
-    if (resultado == -1) {
-        cout << "No es posible devolver la cantidad " << x << endl;
+    if (resultado == infinito) {
+        cout << "No es posible devolver la cantidad con las monedas dadas" << endl;
     } else {
         cout << "El número mínimo de monedas necesarias es: " << resultado << endl;
     }
-
-    // Liberar memoria
-    for (int i = 0; i <= x; i++) {
-        delete[] M[i];
-    }
-    delete[] M;
 
     return 0;
 }
